@@ -1,0 +1,104 @@
+en that the HTML and CSS are already built, we can break it down into key tasks as mentioned
+
+
+Solution Approach:-
+
+
+HTML Structure: Assume an HTML form with inputs for the transaction amount and type (income or expense) and a submit button. There is also a section for displaying the summary.
+
+
+JavaScript Implementation:
+Use JavaScript to manage the transactions, calculate the balance, and display the summary.
+Store the transactions in an array, and each transaction should have a type (income/expense) and amount.
+Use functions to handle adding transactions, calculating totals, and displaying the summary.
+Attach event listeners to handle the form submission and update the summary after each transaction.
+
+Pseudocode
+
+---------assumption-----------------------
+
+
+<form id="transactionForm">
+  <input type="number" id="amount" placeholder="Enter amount" required />
+  <select id="transactionType">
+    <option value="income">Income</option>
+    <option value="expense">Expense</option>
+  </select>
+  <button type="submit">Add Transaction</button>
+</form>
+
+<div id="summary">
+  <p>Total Income: <span id="totalIncome">$0</span></p>
+  <p>Total Expense: <span id="totalExpense">$0</span></p>
+  <p>Balance: <span id="balance">$0</span></p>
+</div>
+
+---------assumption-----------------------
+
+
+
+// Array to hold all transactions
+let transactions = [];
+
+// Function to add a transaction
+function addTransaction(amount, type) {
+  const transaction = {
+    amount: parseFloat(amount),
+    type: type
+  };
+  transactions.push(transaction);
+  calculateTotal();
+  displaySummary();
+}
+
+// Function to calculate the total balance
+function calculateTotal() {
+  let totalIncome = 0;
+  let totalExpense = 0;
+
+  transactions.forEach(transaction => {
+    if (transaction.type === 'income') {
+      totalIncome += transaction.amount;
+    } else if (transaction.type === 'expense') {
+      totalExpense += transaction.amount;
+    }
+  });
+
+  const balance = totalIncome - totalExpense;
+
+  // Update totals in the HTML
+  document.getElementById('totalIncome').innerText = `$${totalIncome}`;
+  document.getElementById('totalExpense').innerText = `$${totalExpense}`;
+  document.getElementById('balance').innerText = `$${balance}`;
+}
+
+// Function to display the summary (could be enhanced for more details)
+function displaySummary() {
+  // Here we update the HTML elements with the total calculations
+  calculateTotal();
+}
+
+// Event listener for the form submission
+document.getElementById('transactionForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent form from refreshing the page
+
+  // Get the input values
+  const amount = document.getElementById('amount').value;
+  const type = document.getElementById('transactionType').value;
+
+  // Call addTransaction function
+  if (amount) {
+    addTransaction(amount, type);
+
+    // Reset the form
+    document.getElementById('transactionForm').reset();
+  }
+});
+
+
+Explanation:-
+
+Form Submission: The form submission triggers an event listener, preventing the default page reload. It fetches the input values for amount and transaction type.
+addTransaction Function: Adds the transaction to the transactions array and calls calculateTotal and displaySummary to update the view.
+calculateTotal Function: Iterates through the transactions to calculate the total income, expense, and balance. These values are displayed in the summary section.
+displaySummary Function: This is used to update the HTML elements reflecting the current financial summary.
